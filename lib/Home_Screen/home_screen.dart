@@ -10,7 +10,6 @@ class HomePage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
           title: Text(
             'Daily motivation',
             style: TextStyle(
@@ -35,17 +34,19 @@ class HomePage extends StatelessWidget {
         ),
         body: TabBarView(
           children: <Widget>[
-            Stack(children: <Widget>[
-              Center(
-                child: Image.asset(
-                  'images/background.jpg',
-                  width: size.width,
-                  height: size.height,
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'images/bgg.jpg',
+                  ),
                   fit: BoxFit.fill,
                 ),
               ),
-              QuoteData(),
-            ]),
+              child: Center(
+                child: QuoteData(),
+              ),
+            ),
             FavoriteQuotes(),
           ],
         ),

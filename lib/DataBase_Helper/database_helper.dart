@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import './Quote.dart';
+import '../Models/quote_model.dart';
 
 class DataBaseHelper {
   static Database _db;

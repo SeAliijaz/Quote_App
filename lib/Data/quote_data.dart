@@ -3,17 +3,26 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
-import './Quote.dart';
-import './database_helper.dart';
+import '../Models/quote_model.dart';
+import '../DataBase_Helper/database_helper.dart';
 
 class QuoteData extends StatefulWidget {
   @override
   _QuoteDataState createState() => _QuoteDataState();
 }
 
-// call the API and fetch the response
+///API_Link
+String linkAPI = 'https://favqs.com/api/qotd';
+
+///To Add Faviroute btn
+bool isWhite = false;
+bool isRed = false;
+Color btnClr;
+IconData btn;
+
+///Call the API and fetch the response
 Future<Quote> fetchQuote() async {
-  final response = await http.get('https://favqs.com/api/qotd');
+  final response = await http.get(Uri.parse(linkAPI));
   if (response.statusCode == 200) {
     return Quote.fromJson(json.decode(response.body));
   } else {
@@ -24,16 +33,21 @@ Future<Quote> fetchQuote() async {
 class _QuoteDataState extends State<QuoteData>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive {
+    return true;
+  }
 
   Future<Quote> quote;
   var dbHelper;
   Future<List<Quote>> wholeQuotes;
+
   @override
   void initState() {
     super.initState();
     quote = fetchQuote();
     dbHelper = DataBaseHelper();
+    btn = Icons.favorite;
+    btnClr = Colors.white;
   }
 
   @override
@@ -46,15 +60,15 @@ class _QuoteDataState extends State<QuoteData>
           return SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: [
                 Container(
                   margin: EdgeInsets.only(left: 50.0),
                   child: Text(
-                    snapshot.data.quoteText,
+                    "${snapshot.data.quoteText}",
                     style: TextStyle(
-                        fontSize: 30.0,
-                        color: Colors.white,
-                        fontFamily: 'quoteScript'),
+                      fontSize: 30.0,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -81,27 +95,39 @@ class _QuoteDataState extends State<QuoteData>
                       },
                     ),
                     IconButton(
-                      icon: Icon(
-                        Icons.favorite_border,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Quote q = Quote(
-                            quoteId: null,
-                            quoteText: snapshot.data.quoteText,
-                            quoteAuthor: snapshot.data.quoteAuthor);
-                        dbHelper.saveQuote(q);
-                        final snackBar = SnackBar(
-                          backgroundColor: Colors.black,
-                          content: Text(
-                            'Added to favorites',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 15.0),
-                          ),
-                        );
-                        Scaffold.of(context).showSnackBar(snackBar);
-                      },
-                    ),
+                        icon: Icon(
+                          btn,
+                          color: btnClr,
+                        ),
+                        onPressed: () {
+                          if (isWhite == false) {
+                            setState(() {
+                              btn = Icons.favorite;
+                              btnClr = Colors.white;
+                              isWhite = true;
+                            });
+                          } else if (isRed == false) {
+                            setState(() {
+                              btn = Icons.favorite;
+                              btnClr = Colors.red;
+                              isRed = true;
+                              Quote q = Quote(
+                                  quoteId: null,
+                                  quoteText: snapshot.data.quoteText,
+                                  quoteAuthor: snapshot.data.quoteAuthor);
+                              dbHelper.saveQuote(q);
+                              final snackBar = SnackBar(
+                                backgroundColor: Colors.black,
+                                content: Text(
+                                  'Added to favorites',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15.0),
+                                ),
+                              );
+                              Scaffold.of(context).showSnackBar(snackBar);
+                            });
+                          }
+                        }),
                   ],
                 )
               ],
@@ -111,7 +137,24 @@ class _QuoteDataState extends State<QuoteData>
           return Text("${snapshot.error}");
         }
         // By default, show a loading spinner.
-        return Center(child: CircularProgressIndicator());
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Center(
+                child: Text(
+                  'Loading Data',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Center(child: CircularProgressIndicator()),
+            ],
+          ),
+        );
       },
     );
   }
