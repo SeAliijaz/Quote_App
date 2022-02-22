@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../Models/quote_model.dart';
-import '../DataBase_Helper/database_helper.dart';
+import 'package:quote_app/DataBase_Helper/database_helper.dart';
+import 'package:quote_app/Models/quote_model.dart';
 
 class FavoriteQuotes extends StatefulWidget {
   @override
