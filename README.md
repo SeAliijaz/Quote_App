@@ -8,12 +8,10 @@ A few resources to get you started if this is your first Flutter project:
 
 ## Screenshots
 
-![WhatsApp Image 2022-02-22 at 6 07 15 AM](https://user-images.githubusercontent.com/89317342/155044992-999db36a-7d7b-475c-a0b2-9c1fb9f27859.jpeg)
-![WhatsApp Image 2022-02-22 at 6 07 15 AM (1)](https://user-images.githubusercontent.com/89317342/155044999-ddec19ff-69a3-40f0-a8c2-1801f4d6381b.jpeg)
-![WhatsApp Image 2022-02-22 at 6 07 15 AM (2)](https://user-images.githubusercontent.com/89317342/155045005-eb44761a-3f01-41c8-92b1-b819a342f011.jpeg)
+![WhatsApp Image 2022-02-25 at 3 34 20 AM (2)](https://user-images.githubusercontent.com/89317342/155618831-78043573-7184-45ed-b9ee-4682f9840a9b.jpeg)
+![WhatsApp Image 2022-02-25 at 3 34 20 AM (1)](https://user-images.githubusercontent.com/89317342/155618840-4500b5ef-d44f-4ec2-a472-6372b03c769a.jpeg)
+![WhatsApp Image 2022-02-25 at 3 34 20 AM](https://user-images.githubusercontent.com/89317342/155618845-8b7f05e5-db15-4f4a-b18b-5882eda1089d.jpeg)
 
-## video demo
+## Video demo
 
-https://user-images.githubusercontent.com/89317342/155045104-ade900d5-6337-44b4-be0f-7a7cbc5948f6.mp4
-
-
+https://user-images.githubusercontent.com/89317342/155618908-7d885d86-dd08-4653-8ca6-707c33adce49.mp4
