@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quote_app/Constants/constants.dart';
 import 'package:quote_app/Models/quote_model.dart';
@@ -51,24 +49,25 @@ class _HomePageState extends State<HomePage> {
           builder: (BuildContext context, AsyncSnapshot<Quote> snapshot) {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
-            }
-            final v = snapshot.data;
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
+            } else {
+              final v = snapshot.data;
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Divider(),
+                  Container(
                     width: size.width,
                     child: Center(
                       child: Column(
                         children: [
-                          Text(
-                            "${v.quoteText}",
-                            style: GoogleFonts.raleway(
-                              textStyle: TextStyle(
-                                fontSize: 30,
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              "${v.quoteText}",
+                              style: GoogleFonts.raleway(
+                                textStyle: TextStyle(
+                                  fontSize: 30,
+                                ),
                               ),
                             ),
                           ),
@@ -91,33 +90,34 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Share.share("${v.quoteText} - ${v.quoteAuthor}").then(
-                          (value) =>
-                              showToastMsg('Sharing your Quote Successfully!'),
-                        );
-                      },
-                      icon: Icon(Icons.share),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        FlutterClipboard.copy(
-                                "${v.quoteText} - ${v.quoteAuthor}")
-                            .then(
-                          (value) => showToastMsg('Copied Quote Successfully!'),
-                        );
-                      },
-                      icon: Icon(Icons.copy),
-                    ),
-                  ],
-                ),
-              ],
-            );
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Share.share("${v.quoteText} - ${v.quoteAuthor}").then(
+                            (value) => showToastMsg(
+                                'Sharing your Quote Successfully!'),
+                          );
+                        },
+                        icon: Icon(Icons.share),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          FlutterClipboard.copy(
+                                  "${v.quoteText} - ${v.quoteAuthor}")
+                              .then(
+                            (value) =>
+                                showToastMsg('Copied Quote Successfully!'),
+                          );
+                        },
+                        icon: Icon(Icons.copy),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }
           },
         ),
       ),
