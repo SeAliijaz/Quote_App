@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size s = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -42,78 +42,87 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Container(
-        height: size.height,
-        width: size.width,
+        height: s.height,
+        width: s.width,
         child: FutureBuilder<Quote>(
           future: fetchData(),
           builder: (BuildContext context, AsyncSnapshot<Quote> snapshot) {
+            final v = snapshot.data;
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
             } else {
-              final v = snapshot.data;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Divider(),
-                  Container(
-                    width: size.width,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Text(
-                              "${v.quoteText}",
-                              style: GoogleFonts.raleway(
-                                textStyle: TextStyle(
-                                  fontSize: 30,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Divider(),
-                          Container(
-                            width: size.width,
-                            child: Center(
+                  Expanded(
+                    child: Container(
+                      width: s.width,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                '-${v.quoteAuthor}-',
-                                style: GoogleFonts.raleway(
+                                "${v.quoteText}",
+                                style: GoogleFonts.lateef(
                                   textStyle: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Divider(),
-                        ],
+                            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "-${v.quoteAuthor}-",
+                                style: GoogleFonts.lateef(
+                                  textStyle: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Share.share(
+                                            "${v.quoteText} - ${v.quoteAuthor}")
+                                        .then(
+                                      (value) => showToastMsg(
+                                          'Sharing Text successfully!'),
+                                    );
+                                  },
+                                  icon: Icon(Icons.share),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    FlutterClipboard.copy(
+                                            "${v.quoteText} - ${v.quoteAuthor}")
+                                        .then(
+                                      (value) => showToastMsg(
+                                        "Copied Text Successfully!",
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(Icons.copy),
+                                ),
+                              ],
+                            ),
+                            Divider(),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Share.share("${v.quoteText} - ${v.quoteAuthor}").then(
-                            (value) => showToastMsg(
-                                'Sharing your Quote Successfully!'),
-                          );
-                        },
-                        icon: Icon(Icons.share),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          FlutterClipboard.copy(
-                                  "${v.quoteText} - ${v.quoteAuthor}")
-                              .then(
-                            (value) =>
-                                showToastMsg('Copied Quote Successfully!'),
-                          );
-                        },
-                        icon: Icon(Icons.copy),
-                      ),
-                    ],
                   ),
                 ],
               );
